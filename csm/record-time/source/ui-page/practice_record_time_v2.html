@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide">
+
+    <j:set
+        var="jvar_task_sys_id"
+        value="${RP.getWindowProperties().get('sysparm_task_sys_id')}" />
+
+    <g:evaluate var="jvar_user_display" jelly="true">
+        gs.getUser().getDisplayName();
+    </g:evaluate>
+
+    <style>
+        .practice-page {
+            --practice-bg: var(--now-color_background--primary, #ffffff);
+            --practice-surface: var(--now-color_background--secondary, #f7f8fa);
+            --practice-text: var(--now-color_text--primary, #202124);
+            --practice-muted: var(--now-color_text--secondary, #667085);
+            --practice-border: var(--now-color_border--primary, #d7dce2);
+            --practice-border-strong: #aeb7c2;
+            --practice-primary: var(--now-color--primary-1, #465bd8);
+            --practice-danger: #c62828;
+            --practice-success: #267a3f;
+            box-sizing: border-box;
+            padding: 20px 24px 24px;
+            background: var(--practice-bg);
+            color: var(--practice-text);
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        .practice-message {
+            display: none;
+            max-width: 1050px;
+            margin: 0 auto 16px;
+            padding: 12px 14px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .practice-error {
+            color: var(--practice-danger);
+            background: rgba(198, 40, 40, 0.06);
+            border: 1px solid rgba(198, 40, 40, 0.35);
+        }
+
+        .practice-success {
+            color: var(--practice-success);
+            background: rgba(38, 122, 63, 0.07);
+            border: 1px solid rgba(38, 122, 63, 0.35);
+        }
+
+        .practice-card {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 24px;
+            box-sizing: border-box;
+            background: var(--practice-surface);
+            border: 1px solid var(--practice-border);
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 36px;
+            row-gap: 20px;
+            align-items: start;
+        }
+
+        .practice-field {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .practice-full {
+            grid-column: 1 / -1;
+        }
+
+        .practice-label {
+            display: block;
+            margin: 0 0 7px;
+            color: var(--practice-text);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .practice-required {
+            margin-right: 3px;
+            color: var(--practice-danger);
+        }
+
+        .practice-control {
+            display: block;
+            width: 100%;
+            height: 40px;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 7px 11px;
+            border: 1px solid var(--practice-border-strong);
+            border-radius: 6px;
+            background: var(--practice-bg);
+            color: var(--practice-text);
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .practice-control:focus,
+        .practice-duration-input:focus,
+        .practice-comments:focus {
+            outline: none;
+            border-color: var(--practice-primary);
+            box-shadow: 0 0 0 2px rgba(70, 91, 216, 0.12);
+        }
+
+        .practice-readonly {
+            color: var(--practice-muted);
+        }
+
+        .practice-choice-wrap {
+            display: block;
+            width: 100%;
+            min-width: 0;
+        }
+
+        #practice_category_wrap select,
+        #practice_time_slot_wrap select,
+        #practice_area_of_work_wrap select {
+            display: block !important;
+            width: 100% !important;
+            max-width: none !important;
+            min-width: 0 !important;
+            height: 40px !important;
+            min-height: 40px !important;
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            padding: 7px 36px 7px 11px !important;
+            border: 1px solid var(--practice-border-strong) !important;
+            border-radius: 6px !important;
+            background-color: var(--practice-bg) !important;
+            color: var(--practice-text) !important;
+            font-family: inherit !important;
+            font-size: 14px !important;
+            line-height: 1.4 !important;
+            cursor: pointer;
+        }
+
+        #practice_category_wrap select:focus,
+        #practice_time_slot_wrap select:focus,
+        #practice_area_of_work_wrap select:focus {
+            outline: none !important;
+            border-color: var(--practice-primary) !important;
+            box-shadow: 0 0 0 2px rgba(70, 91, 216, 0.12) !important;
+        }
+
+        .practice-duration {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 9px;
+            min-height: 40px;
+        }
+
+        .practice-duration-input {
+            width: 78px;
+            height: 40px;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 7px 8px;
+            border: 1px solid var(--practice-border-strong);
+            border-radius: 6px;
+            background: var(--practice-bg);
+            color: var(--practice-text);
+            font-family: inherit;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .practice-duration-text {
+            margin-right: 8px;
+            color: var(--practice-muted);
+            font-size: 13px;
+        }
+
+        .practice-comments {
+            display: block;
+            width: 100%;
+            min-height: 105px;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 10px 12px;
+            border: 1px solid var(--practice-border-strong);
+            border-radius: 6px;
+            background: var(--practice-bg);
+            color: var(--practice-text);
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.45;
+            resize: vertical;
+        }
+
+        .practice-action-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid var(--practice-border);
+        }
+
+        .practice-button {
+            min-height: 40px;
+            padding: 7px 17px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .practice-pending {
+            margin-top: 18px;
+        }
+
+        .practice-pending-title {
+            margin-bottom: 3px;
+            font-size: 16px;
+            font-weight: 650;
+        }
+
+        .practice-help {
+            margin-bottom: 14px;
+            color: var(--practice-muted);
+            font-size: 12px;
+        }
+
+        .practice-empty {
+            padding: 30px 20px;
+            background: var(--practice-bg);
+            color: var(--practice-muted);
+            border: 1px dashed var(--practice-border-strong);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .practice-entry {
+            margin-bottom: 12px;
+            padding: 16px;
+            background: var(--practice-bg);
+            border: 1px solid var(--practice-border);
+            border-radius: 8px;
+        }
+
+        .practice-entry-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .practice-entry-title {
+            font-size: 15px;
+            font-weight: 650;
+        }
+
+        .practice-entry-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .practice-entry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px 22px;
+        }
+
+        .practice-entry-label {
+            margin-bottom: 3px;
+            color: var(--practice-muted);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .practice-entry-value {
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .practice-preview {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: var(--practice-surface);
+            border: 1px solid var(--practice-border);
+            border-radius: 6px;
+        }
+
+        .practice-preview-title {
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .practice-preview-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 30px;
+            max-width: 420px;
+            padding: 4px 0;
+            color: var(--practice-muted);
+            font-size: 12px;
+        }
+
+        .practice-summary {
+            display: flex;
+            justify-content: flex-end;
+            gap: 32px;
+            margin-top: 16px;
+            padding: 13px 16px;
+            background: var(--practice-bg);
+            border: 1px solid var(--practice-border);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .practice-summary-value {
+            margin-left: 4px;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .practice-footer {
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            max-width: 1050px;
+            margin: 18px auto 0;
+            padding: 14px 0 2px;
+            display: flex;
+            justify-content: space-between;
+            background: var(--practice-bg);
+            border-top: 1px solid var(--practice-border);
+        }
+
+        .practice-footer-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        @media (max-width: 850px) {
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-full {
+                grid-column: auto;
+            }
+
+            .practice-entry-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <g:ui_form>
+        <div class="practice-page">
+
+            <input id="practice_task_sys_id_pref" type="hidden" value="${jvar_task_sys_id}" />
+            <input id="practice_task_sys_id" type="hidden" value="" />
+
+            <div id="practice_error" class="practice-message practice-error"></div>
+            <div id="practice_success" class="practice-message practice-success"></div>
+
+            <div class="practice-card">
+                <div class="practice-grid">
+
+                    <div class="practice-field">
+                        <label class="practice-label" for="practice_user_display">User</label>
+                        <input
+                            id="practice_user_display"
+                            type="text"
+                            class="practice-control practice-readonly"
+                            value="${jvar_user_display}"
+                            readonly="readonly" />
+                    </div>
+
+                    <div class="practice-field">
+                        <label class="practice-label" for="practice_work_date">
+                            <span class="practice-required">*</span>Work Date
+                        </label>
+                        <input id="practice_work_date" type="date" class="practice-control" value="" />
+                    </div>
+
+                    <div class="practice-field">
+                        <label class="practice-label">Category</label>
+                        <div id="practice_category_wrap" class="practice-choice-wrap">
+                            <g:ui_choicelist
+                                name="practice_category"
+                                table="task_time_worked"
+                                field="category" />
+                        </div>
+                    </div>
+
+                    <div class="practice-field">
+                        <label class="practice-label">
+                            <span class="practice-required">*</span>Time Slot
+                        </label>
+                        <div id="practice_time_slot_wrap" class="practice-choice-wrap">
+                            <g:ui_choicelist
+                                name="practice_time_slot"
+                                table="task_time_worked"
+                                field="u_time_slot" />
+                        </div>
+                    </div>
+
+                    <div class="practice-field">
+                        <label class="practice-label">
+                            <span class="practice-required">*</span>Area of work
+                        </label>
+                        <div id="practice_area_of_work_wrap" class="practice-choice-wrap">
+                            <g:ui_choicelist
+                                name="practice_area_of_work"
+                                table="task_time_worked"
+                                field="u_area_of_work" />
+                        </div>
+                    </div>
+
+                    <div class="practice-field">
+                        <label class="practice-label">
+                            <span class="practice-required">*</span>Time worked
+                        </label>
+                        <div class="practice-duration">
+                            <input
+                                id="practice_hours"
+                                type="number"
+                                class="practice-duration-input"
+                                min="0"
+                                max="12"
+                                step="1"
+                                value="0" />
+                            <span class="practice-duration-text">Hours</span>
+
+                            <input
+                                id="practice_minutes"
+                                type="number"
+                                class="practice-duration-input"
+                                min="0"
+                                max="59"
+                                step="1"
+                                value="0" />
+                            <span class="practice-duration-text">Minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="practice-field practice-full">
+                        <label class="practice-label" for="practice_comments">Comments</label>
+                        <textarea
+                            id="practice_comments"
+                            class="practice-comments"
+                            maxlength="4000"
+                            rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="practice-action-row">
+                    <button
+                        id="practice_add"
+                        type="button"
+                        class="btn btn-default practice-button"
+                        disabled="disabled">+ Add Entry</button>
+                </div>
+            </div>
+
+            <div class="practice-card practice-pending">
+                <div class="practice-pending-title">Time to be Recorded</div>
+                <div class="practice-help">
+                    Add Entry stages the activity. No Time Worked record is created until Submit All is selected.
+                </div>
+
+                <div id="practice_entries" class="practice-empty">
+                    No Time Worked entries have been added.
+                </div>
+
+                <div class="practice-summary">
+                    <span>
+                        Total Time:
+                        <span id="practice_total_time" class="practice-summary-value">0m</span>
+                    </span>
+                    <span>
+                        Records to Create:
+                        <span id="practice_record_count" class="practice-summary-value">0</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="practice-footer">
+                <button id="practice_close" type="button" class="btn btn-default practice-button">Close</button>
+
+                <div class="practice-footer-right">
+                    <button id="practice_clear" type="button" class="btn btn-default practice-button">Clear All</button>
+                    <button
+                        id="practice_submit"
+                        type="button"
+                        class="btn btn-primary practice-button"
+                        disabled="disabled">Submit All</button>
+                </div>
+            </div>
+        </div>
+    </g:ui_form>
+
+</j:jelly>

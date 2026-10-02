@@ -1,0 +1,112 @@
+[
+  {
+    "name": "training_table",
+    "label": "Training table",
+    "type": "string",
+    "default_value": "u_training"
+  },
+  {
+    "name": "category_table",
+    "label": "Category table",
+    "type": "string",
+    "default_value": "u_training_category"
+  },
+  {
+    "name": "max_records",
+    "label": "Maximum active training records",
+    "type": "integer",
+    "default_value": "500"
+  },
+  {
+    "name": "default_expand_depth",
+    "label": "Default expand depth",
+    "type": "integer",
+    "default_value": "1"
+  },
+  {
+    "name": "show_filter_panel",
+    "label": "Show filter panel",
+    "type": "boolean",
+    "default_value": "true"
+  },
+  {
+    "name": "search_placeholder",
+    "label": "Search placeholder",
+    "type": "string",
+    "default_value": "Search active training records..."
+  },
+  {
+    "name": "dynamic_filter_fields",
+    "label": "Dynamic filter fields from training table, including CPD",
+    "type": "string",
+    "default_value": "u_delivery_type,u_course_model,u_cpd"
+  },
+  {
+    "name": "course_url_field",
+    "label": "Course URL field",
+    "type": "string",
+    "default_value": "u_course_url"
+  },
+  {
+    "name": "category_image_field",
+    "label": "Category image field",
+    "type": "string",
+    "default_value": "u_icon"
+  },
+  {
+    "name": "category_image_source",
+    "label": "Category image source",
+    "type": "choice",
+    "choices": [
+      {
+        "label": "Attachment / sys_attachment",
+        "value": "attachment"
+      },
+      {
+        "label": "Image table / db_image",
+        "value": "db_image"
+      }
+    ],
+    "default_value": "attachment"
+  },
+  {
+    "name": "training_image_field",
+    "label": "Training image field",
+    "type": "string",
+    "default_value": "u_course_image"
+  },
+  {
+    "name": "training_image_source",
+    "label": "Training image source",
+    "type": "choice",
+    "choices": [
+      {
+        "label": "Attachment / sys_attachment",
+        "value": "attachment"
+      },
+      {
+        "label": "Image table / db_image",
+        "value": "db_image"
+      }
+    ],
+    "default_value": "attachment"
+  },
+  {
+    "name": "brand_primary",
+    "label": "Brand primary colour",
+    "type": "string",
+    "default_value": ""
+  },
+  {
+    "name": "brand_secondary",
+    "label": "Brand secondary colour",
+    "type": "string",
+    "default_value": ""
+  },
+  {
+    "name": "custom_css_class",
+    "label": "Custom CSS class",
+    "type": "string",
+    "default_value": ""
+  }
+]

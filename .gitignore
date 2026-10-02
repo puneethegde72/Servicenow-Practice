@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+private/
+exports/
+update-set-inventory/
+extracted-update-set/
+*.har
+*.log
+*.zip
