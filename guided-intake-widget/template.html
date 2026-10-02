@@ -1,0 +1,81 @@
+<section class="intake" ng-if="c.data.catalogItemWidget">
+  <header class="intake-intro">
+    <h1>{{::c.data.copy.title}}</h1>
+    <p>{{::c.data.copy.intro}}</p>
+  </header>
+
+  <div class="intake-layout" ng-class="{'intake-layout--review': c.showingAll}">
+    <aside class="intake-nav" aria-label="Form navigation">
+      <div class="intake-overall">
+        <div class="intake-overall__heading">
+          <span>{{::c.data.copy.progress}}</span>
+          <strong>{{c.progress()}}%</strong>
+        </div>
+        <div class="intake-overall__track" role="progressbar"
+             aria-label="Overall progress" aria-valuemin="0" aria-valuemax="100"
+             ng-attr-aria-valuenow="{{c.progress()}}">
+          <span ng-style="{'width': c.progress() + '%'}"></span>
+        </div>
+      </div>
+
+      <ol class="intake-steps" ng-if="!c.showingAll">
+        <li ng-repeat="p in c.pages track by p.key">
+          <button type="button" class="intake-step"
+                  ng-class="{'intake-step--active': $index === c.index}"
+                  ng-disabled="!c.formReady || c.transitioning || $index > c.maxVisited"
+                  ng-click="c.selectPage($index)"
+                  ng-attr-aria-current="{{$index === c.index ? 'step' : undefined}}"
+                  ng-attr-aria-label="{{'Step ' + ($index + 1) + ': ' + p.title + ', ' + c.pageProgress($index) + '% answered'}}">
+            <span class="intake-step__ring" aria-hidden="true">
+              <svg viewBox="0 0 44 44">
+                <circle class="intake-step__ring-track" cx="22" cy="22" r="18"></circle>
+                <circle class="intake-step__ring-fill" cx="22" cy="22" r="18"
+                        ng-attr-stroke-dasharray="{{(c.pageProgress($index) * 1.131) + ' 113.1'}}"></circle>
+              </svg>
+              <span>{{$index + 1}}</span>
+            </span>
+            <span class="intake-step__text">
+              <small>Step {{$index + 1}} of {{c.pages.length}}</small>
+              <span>{{p.title}}</span>
+              <small>{{c.pageProgress($index)}}% answered</small>
+            </span>
+          </button>
+        </li>
+      </ol>
+
+      <p class="intake-review-note" ng-if="c.showingAll">Review your answers before sending.</p>
+
+      <div class="intake-actions">
+        <button type="button" class="intake-button intake-button--quiet"
+                ng-if="!c.showingAll && c.index > 0" ng-click="c.previous()">Previous</button>
+        <button type="button" class="intake-button intake-button--primary"
+                ng-if="!c.showingAll && !c.isLast() && c.pageReady()" ng-click="c.next()">
+          {{::c.data.copy.next}} <span aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="intake-button intake-button--primary"
+                ng-if="!c.showingAll && c.isLast() && c.pageReady()" ng-click="c.reviewAll()">
+          {{::c.data.copy.review}} <span aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="intake-button intake-button--quiet"
+                ng-if="c.showingAll" ng-click="c.backToSteps()">Edit answers</button>
+        <button type="button" class="intake-button intake-button--primary"
+                ng-if="c.showingAll" ng-click="c.submitFinal()">{{::c.data.copy.submit}}</button>
+      </div>
+
+      <p class="intake-help" ng-if="!c.showingAll && !c.pageReady() && c.formReady">
+        Complete the required fields to continue.
+      </p>
+      <p class="intake-error" role="alert" ng-if="c.error">{{c.error}}</p>
+    </aside>
+
+    <main class="intake-form" ng-class="{'intake-form--changing': c.transitioning}">
+      <div class="intake-form__body">
+        <sp-widget widget="c.data.catalogItemWidget"></sp-widget>
+      </div>
+    </main>
+  </div>
+</section>
+
+<div class="intake-unavailable" role="alert" ng-if="!c.data.catalogItemWidget">
+  {{c.data.error}}
+</div>

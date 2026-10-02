@@ -1,0 +1,12 @@
+[
+  {"name":"catalog_item_id","label":"Catalog item sys_id (optional; otherwise URL sys_id)","type":"string"},
+  {"name":"catalog_widget_id","label":"Embedded catalog widget ID","type":"string"},
+  {"name":"title","label":"Heading (defaults to item name)","type":"string"},
+  {"name":"intro","label":"Description (defaults to item short description)","type":"string"},
+  {"name":"single_page_title","label":"Page name without containers","type":"string"},
+  {"name":"progress_label","label":"Progress label","type":"string"},
+  {"name":"next_label","label":"Next button label","type":"string"},
+  {"name":"review_label","label":"Review button label","type":"string"},
+  {"name":"submit_label","label":"Final button label","type":"string"},
+  {"name":"native_submit_selector","label":"Native submit CSS selector if needed","type":"string"}
+]
